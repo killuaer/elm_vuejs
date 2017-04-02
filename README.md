@@ -36,9 +36,39 @@ npm run build
 6. 项目运行过程：`npm run dev` ==> `node build/dev-server.js` ==> 检查当前版本的npm和node.js ==> 配置当前shell环境采用开发环境(另一个是产品环境) ==> 取得webpack的node.js的API并应用webpack配置 ==> 应用webpack-dev-middleware ==> 应用webpack-hot-middleware ==> 配置代理api请求 ==> 创建一个express应用app ==> app使用'webpack-dev-middleware'中间件(服务中webpack打包输出) ==> app使用'webpack-hot-middleware'中间件(热加载数据) ==> 配置app的静态资源 ==> app监听端口并启动服务 ==> webpack-dev-middleware中间件等到初始化完成后启动浏览器
 
 
-
-
-
+## step-0：项目准备
+1. 分析设计图把内容切分成几个部分，每部分有哪些功能
+2. 处理SVG文件，通过[icomoon](https://icomoon.io/)网站把SVG内容转换成图标字体
+3. 项目源码目录构成：
+```
+...
+|---src 							// 源码目录
+	|---common						// 公共资源目录
+	|	|---font 					
+	|	|---js 						
+	|	|---stylus					
+	|---components					// 组件目录
+	|---App.vue 					// vue实例文件
+	|---main.js 					// 入口文件
+...
+```
+4. 模拟后台数据：
+	- 封装的json数据包含有三部分，商家数据、商品数据和评论数据。
+	- 数据的获取需要通过express框架路由接口请求，引入数据、配置express路由和应用路由
+	``` 
+	// build/dev-server.js
+	...													// 省略代码
+	var app = express();
+	var apiRoutes = express.Router();					
+	var appData = require('../data');
+	var seller = appData.seller;						// 商家数据
+				
+	apiRoutes.get('/seller',function(req,res){			// 配置商家数据路由
+	  res.json({errno: 0, data: seller});
+	});
+	...													// 省略类似的路由配置
+	app.use('/api',apiRoutes)							// 应用路由
+	```
 
 
 
