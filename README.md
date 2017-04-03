@@ -71,9 +71,16 @@ npm run build
 	```
 
 
-
-
-
+## step-1：页面骨架开发
+1. 引入reset.css，清除标签默认样式，然后对应用的viewport进行设置，适应移动端的显示。
+```
+<meta name="viewport" 
+	  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+```
+2. 把页面拆成三个区块，header、tab和content,点击tab切换时，content内容会相应的改变，它是通过vue-router实现的。
+3. 由于css使用了stylus语法，所以需要`npm install stylus stylus-loader --save-dev`,不然会报错。
+4. vue-router的使用：全局应用路由功能 ==> 定义路由映射 ==> 创建router实例并应用映射配置 ==> 设置router-view出口 ==> router实例挂载到根实例
+5. 1像素边框实现原理：为要添加1像素边框的元素设置相对定位，再为它添加一个after伪类，该伪类设置为内容为空、1像素上边框、宽度100%和绝对定位，最后再根据不同的dpr对边框进行缩放
 
 
 
