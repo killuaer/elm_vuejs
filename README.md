@@ -89,7 +89,11 @@ npm run build
 3. 巧用stylus的mixin语法
 
 
-
+## step-3：详情弹页层
+1. css sticky footer布局,包裹主体内容的div底部留有一定的padding值，底部内容在margin-top为负值，占据包裹容器的留白位置，包裹容器最小高度应为100%，并且高度能随着内部的内容变多而撑高，使得底部内容总能在理想的位置
+2. 抽象出star组件
+3. 弹出层显示隐藏的过渡效果
+4. flex自适应布局
 
 
 
