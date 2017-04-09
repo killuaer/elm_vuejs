@@ -33,11 +33,13 @@
 				</li>
 			</ul>
 		</div>
+		<shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 	</div>
 </template>
 
 <script type="text/javascript">
  import BScroll from 'better-scroll'
+ import shopcart from '../shopcart/shopcart'
 
  const ERR_OK = 0
 
@@ -61,7 +63,6 @@
     			let heightF = this.listHeight[i]
     			let heightS = this.listHeight[i + 1]
     			if (!heightS || (this.scrollY >= heightF && this.scrollY < heightS)) {
-    				console.log(i)
     				return i
     			}
     		}
@@ -112,6 +113,9 @@
     			this.listHeight.push(height)
     		}
     	}
+    },
+    components: {
+    	shopcart
     }
  }
 </script>
