@@ -25,7 +25,10 @@
 									<span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
 								</div>
 								<div class="price">
-									<span class="now">￥{{food.price}}</span><span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
+									<span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">¥{{food.oldPrice}}</span>
+								</div>
+								<div class="cartcontrol-wrapper">
+									<cartcontrol @add="addFood" :food="food"></cartcontrol>
 								</div>
 							</div>
 						</li>
@@ -33,13 +36,14 @@
 				</li>
 			</ul>
 		</div>
-		<shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+		<shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
 	</div>
 </template>
 
 <script type="text/javascript">
  import BScroll from 'better-scroll'
  import shopcart from '../shopcart/shopcart'
+ import cartcontrol from '../cartcontrol/cartcontrol'
 
  const ERR_OK = 0
 
@@ -67,6 +71,17 @@
     			}
     		}
     		return 0
+    	},
+    	selectFoods () {
+    		let foods = []
+    		this.goods.forEach((good) => {
+    			good.foods.forEach((food) => {
+    				if (food.count) {
+    					foods.push(food)
+    				}
+    			})
+    		})
+    		return foods
     	}
     },
     created () {
@@ -92,12 +107,22 @@
     		let el = foodList[index]
     		this.foodsScroll.scrollToElement(el, 300)
     	},
+    	addFood (target) {
+	    	this._drop(target)
+	    },
+	    _drop (target) {
+	        // 体验优化,异步执行下落动画
+	        this.$nextTick(() => {
+	          this.$refs.shopcart.drop(target)
+	        })
+	    },
     	_initScroll () {
     		 this.meunScroll = new BScroll(this.$refs.menuWrapper, {
     		 	click: true
     		 })
     		 this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-    		 	probeType: 3
+    		 	probeType: 3,
+    		 	click: true
     		 })
     		 this.foodsScroll.on('scroll', (pos) => {
     		 	this.scrollY = Math.abs(Math.round(pos.y))
@@ -115,7 +140,8 @@
     	}
     },
     components: {
-    	shopcart
+    	shopcart,
+    	cartcontrol
     }
  }
 </script>
@@ -223,6 +249,10 @@
 							text-decoration: line-through
 							font-size: 10px
 							color: rgb(147, 153, 159)
+					.cartcontrol-wrapper
+						position: absolute
+						right: -10px
+						bottom: 12px
 					
 				
 </style>
