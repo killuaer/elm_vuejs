@@ -130,3 +130,8 @@ npm run build
 ## step-11：ratings组件开发
 1. 在vue的created生命周期中获取商家评论数据
 2. 复用之前写好的star组件、split组件、ratingselect组件和formatDate函数，还有实现滚动效果
+
+## step-12：商家简介、公告与活动和BScroll的运用
+1. 复用之前写好的star组件、split组件和公告与活动信息的遍历。
+2. BScroll在更新页面和更新DOM下的运用，vue的生命周期选项会优先于watch选项执行
+
