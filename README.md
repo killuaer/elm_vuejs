@@ -127,3 +127,6 @@ npm run build
 1. 遍历商品的评价内容，再根据选择的评价类型和是否有内容，对评价内容进行筛选
 2. 运用正则抽象出对时间格式化的通用方法
 
+## step-11：ratings组件开发
+1. 在vue的created生命周期中获取商家评论数据
+2. 复用之前写好的star组件、split组件、ratingselect组件和formatDate函数，还有实现滚动效果
