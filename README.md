@@ -135,3 +135,9 @@ npm run build
 1. 复用之前写好的star组件、split组件和公告与活动信息的遍历。
 2. BScroll在更新页面和更新DOM下的运用，vue的生命周期选项会优先于watch选项执行
 
+## step-13：商家实景图、收藏商家和keep-alive
+1. 商家实景图运用了better-scroll的横向移动和禁用图片区垂直滚动的功能
+2. 收藏商家时，应当记录商家ID和商家收藏属性的值，商家ID值从window.location.search中截取获得，运用localStorage存储和读取数据，并将其抽象出通用的存取数据的方法
+3. vue实例化后的属性可以通过`Object.assign({},this.seller,response.data)`来扩展
+4. keep-alive组件主要用于保留组件状态或避免重新渲染。
+
