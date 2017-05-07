@@ -3,22 +3,26 @@
      <v-header :seller="seller" ></v-header>
      <div class="tab border-1px">
         <div class="tab-item">
-          <router-link to="/goods">商品</router-link>
+          <router-link to="/elm/goods">商品</router-link>
         </div>
         <div class="tab-item">
-          <router-link to="/ratings">评论</router-link>
+          <router-link to="/elm/ratings">评论</router-link>
         </div>
         <div class="tab-item">
-          <router-link to="/seller">商家</router-link>
+          <router-link to="/elm/seller">商家</router-link>
         </div>
      </div>
-     <router-view></router-view>
+     <di
+     <keep-alive>
+        <router-view :seller="seller"></router-view>
+     </keep-alive>
   </div>
 </template>
 
 <script>
 
 import Header from './components/header/Header'
+import {urlParse} from './common/js/util'
 
 const ERR_OK = 0
 
@@ -26,17 +30,22 @@ export default {
   name: 'app',
   data () {
     return {
-      seller: {}
+      seller: {
+        id: (() => {
+          let queryParam = urlParse()
+          return queryParam.id
+        })()
+      }
     }
   },
   components: {
     'v-header': Header
   },
   created () {
-    this.$http.get('/api/seller').then(response => {
+    this.$http.get('/api/seller?id=' + this.seller.id).then(response => {
         response = response.body
         if (response.errno === ERR_OK) {
-          this.seller = response.data
+         this.seller = Object.assign({}, this.seller, response.data)
         }
     })
   }

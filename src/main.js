@@ -14,10 +14,10 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 
 const routes = [
-  { path: '/', redirect: '/goods' },
-  { path: '/seller', component: Seller },
-  { path: '/goods', component: Goods },
-  { path: '/ratings', component: Ratings }
+  { path: '/(elm/?)', redirect: '/elm/goods' },
+  { path: '/elm/seller', component: Seller },
+  { path: '/elm/goods', component: Goods },
+  { path: '/elm/ratings', component: Ratings }
 ]
 
 const router = new VueRouter({
