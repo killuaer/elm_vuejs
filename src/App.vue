@@ -6,7 +6,7 @@
           <router-link to="/elm/goods">商品</router-link>
         </div>
         <div class="tab-item">
-          <router-link to="/elm/ratings">评论</router-link>
+          <router-link to="/elm/ratings" >评论 <span class="ratingsCount">({{seller.score}})</span></router-link>
         </div>
         <div class="tab-item">
           <router-link to="/elm/seller">商家</router-link>
@@ -69,6 +69,12 @@ export default {
           color: rgb(77, 85, 93)
           display: block
           font-size: 14px
+          .ratingsCount
+            color: #f90
           &.active
-            color: rgb(240,20,20)
+            height: 35px
+            color: #1a96ff
+            border-bottom: 4px solid #1a96ff
+            .ratingsCount
+              color: #1a96ff
 </style>

@@ -17,12 +17,29 @@
 		props: {
 			food: {
 				type: Object
+			},
+			goods: {
+				type: Array
+			},
+			goodType: {
+				type: Number
 			}
 		},
 		methods: {
 			addCart (event) {
 				if (!event._constructed) {
 					return
+				}
+
+				let goodCount = this.goods[this.goodType].goodCount
+		    	if (!goodCount) {
+					Vue.set(this.goods[this.goodType], 'goodCount', 1)
+		    	} else {
+		    		this.goods[this.goodType].goodCount++
+		    	}
+
+		    	if (!this.food.goodType) {
+					Vue.set(this.food, 'goodType', this.goodType)
 				}
 				if (!this.food.count) {
 					Vue.set(this.food, 'count', 1)
@@ -37,6 +54,7 @@
 				}
 				if (this.food.count) {
 					this.food.count--
+					this.goods[this.goodType].goodCount--
 				}
 			}
 		}
@@ -55,7 +73,7 @@
 			.inner
 				display: inline-block
 				line-height: 24px
-				font-size: 24px
+				font-size: 28px
 				color: rgb(0, 160, 220)
 				transform: rotate(0)
 			&.move-enter-active, &.move-leave-active
@@ -71,7 +89,7 @@
 			display: inline-block
 			vertical-align: top
 			padding-top: 6px
-			font-size: 10px
+			font-size: 14px
 			line-height: 24px
 			text-align: center
 			.inner
@@ -88,8 +106,8 @@
 					transform: rotate(-360deg)
 		.cart-add
 			display: inline-block
-			padding: 6px 6px 6px 0
+			padding: 6px 0
 			line-height: 24px
-			font-size: 24px
+			font-size: 28px
 			color: rgb(0, 160, 220)
 </style>
