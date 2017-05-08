@@ -34,17 +34,17 @@
 						<span class="empty" @click="empty">清空</span>
 					</div>
 					<div class="list-content" ref="listContent">
-						<ul>
-							<li class="food" v-for="food in selectFoods">
+						<transition-group name="fade" tag="ul">
+							<li class="food" v-for="food in selectFoods" :key="food.name">
 								<span class="name">{{food.name}}</span>
 								<div class="price">
-									<span>￥{{food.price*food.count}}</span>
+									<span>{{food.price*food.count}}</span>
 								</div>
 								<div class="cartcontrol-wrapper">
-									<cartcontrol :food="food"></cartcontrol>
+									<cartcontrol :food="food" :goods="goods" :goodType="food.goodType"></cartcontrol>
 								</div>
 							</li>
-						</ul>
+						</transition-group>
 					</div>
 				</div>
 			</transition>
@@ -74,7 +74,10 @@
 	   		minPrice: {
 	   			type: Number,
 	   			default: 0
-	   		}
+	   		},
+			goods: {
+				type: Array
+			}
 	    },
 	    data () {
 	    	return {
@@ -211,6 +214,7 @@
 	    	empty () {
 	    		this.selectFoods.forEach((food) => {
 	    			food.count = 0
+	    			this.goods[food.goodType].goodCount = 0
 	    		})
 	    	},
 	    	hideList () {
@@ -316,13 +320,20 @@
 				left: 32px
 				bottom: 22px
 				z-index: 200
-				transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
+				transition: all 0.6s cubic-bezier(0.49, -0.29, 0.75, 0.41)
 				.inner
-					width: 16px
-					height: 16px
+					width: 20px
+					height: 20px
 					border-radius: 50%
 					background: rgb(0, 160, 220)
-					transition: all 0.4s linear
+					transition: all 0.6s linear
+					&:after
+						position: absolute
+						left: 6px
+						content: '1'
+						line-height: 18px
+						font-size: 13px
+						color: #fff
 		.shopcart-list
 			position: absolute
 			top: 0
@@ -355,10 +366,14 @@
 				background: #fff
 				.food
 					position: relative
+					height: 48px
 					padding: 12px 0
 					box-sizing: border-box
 					border-1px(rgba(7,17,27,0.1))
 					.name
+						position: absolute
+						left: 0px
+						bottom: 12px
 						line-height: 24px
 						font-size: 14px
 						color: rgb(7, 17, 27)
@@ -370,10 +385,20 @@
 						font-size: 14px
 						font-weight 700
 						color: rgb(240, 20, 20)
+						span:before
+							content: '￥'
+							font-size: 8px
+							font-weight: 700
 					.cartcontrol-wrapper
 						position: absolute
 						bottom: 6px
 						right: 0
+					&.fade-enter-active, &.fade-leave-active
+						transition: all 0.5s linear
+					&.fade-enter, &.fade-leave-active
+						height: 0
+						padding: 0
+						z-index: 0
 	.list-mask
 		position: fixed
 		top: 0px

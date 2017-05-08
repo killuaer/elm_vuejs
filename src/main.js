@@ -17,7 +17,8 @@ const routes = [
   { path: '/(elm/?)', redirect: '/elm/goods' },
   { path: '/elm/seller', component: Seller },
   { path: '/elm/goods', component: Goods },
-  { path: '/elm/ratings', component: Ratings }
+  { path: '/elm/ratings', component: Ratings },
+  { path: '/elm/*', redirect: '/elm/goods' }
 ]
 
 const router = new VueRouter({

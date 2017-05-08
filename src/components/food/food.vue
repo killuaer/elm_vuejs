@@ -15,10 +15,10 @@
 						<span class="rating">好评率{{food.rating}}%</span>
 					</div>
 					<div class="price">
-						<span class="now">￥{{food.price}}</span><span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
+						<span class="now">{{food.price}}</span><span v-show="food.oldPrice" class="old">{{food.oldPrice}}</span>
 					</div>
 					<div class="cartcontrol-wrapper">
-						<cartcontrol :food="food" @add="addFood"></cartcontrol>
+						<cartcontrol :food="food" @add="addFood" :goods="goods" :goodType="goodType"></cartcontrol>
 					</div>
 					<transition name="fade">
 						<div  @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count === 0">
@@ -72,6 +72,12 @@
 		props: {
 			food: {
 				type: Object
+			},
+			goods: {
+				type: Array
+			},
+			goodType: {
+				type: Number
 			}
 		},
 		data () {
@@ -108,6 +114,7 @@
 				if (!event._constructed) {
 					return
 				}
+				Vue.set(this.goods[this.goodType], 'goodCount', 1)
 				Vue.set(this.food, 'count', 1)
 				this.$emit('add', event.target)
 			},
@@ -183,9 +190,9 @@
 				left: 0
 				.icon-arrow_lift
 					display: block
-					padding: 10px
+					padding: 15px
 					font-size: 20px
-					color: #7f8489
+					color: #fff
 		.content
 			position: relative
 			padding: 18px
@@ -212,10 +219,18 @@
 					margin-right: 8px
 					font-size: 14px
 					color: rgb(240, 20, 20)
+					&:before
+						content: '￥'
+						font-size: 8px
+						font-weight: 700
 				.old
 					text-decoration: line-through
 					font-size: 10px
 					color: rgb(147, 153, 159)
+					&:before
+						content: '￥'
+						font-size: 8px
+						font-weight: 700
 			.cartcontrol-wrapper
 				position: absolute
 				right: 12px

@@ -1,9 +1,9 @@
 <template>
 	<div class="ratingselect">
 		<div class="rating-type border-1px">
-			<span @click="select(2,$event)" class="block positive" :class="{'active':selectType===2}">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
-			<span @click="select(0,$event)" class="block positive" :class="{'active':selectType===0}">{{desc.positive}}<span class="count">{{positives.length}}</span></span>
-			<span @click="select(1,$event)" class="block negative" :class="{'active':selectType===1}">{{desc.negative}}<span class="count">{{negatives.length}}</span></span>
+			<span @click="select(2,$event)" class="block positive" :class="{'active':selectType===2}">{{desc.all}}<span class="count">({{ratings.length}})</span></span>
+			<span @click="select(0,$event)" class="block positive" :class="{'active':selectType===0}">{{desc.positive}}<span class="count">({{positives.length}})</span></span>
+			<span @click="select(1,$event)" class="block negative" :class="{'active':selectType===1}">{{desc.negative}}<span class="count">({{negatives.length}})</span></span>
 		</div>
 		<div @click="toggleContent" class="switch" :class="{'on':onlyContent}">
 			<span class="icon-check_circle"></span>
@@ -83,18 +83,20 @@
 			margin: 0 18px
 			font-size: 0
 			border-1px(rgba(7, 17, 27,0.1))
+			&:after
+				border-top: 1px dashed rgba(7, 17, 27, 0.1)
 			.block
 				display: inline-block
 				padding: 8px 12px
 				margin-right: 8px
-				border-radius: 1px
+				border-radius: 5px
 				color: rgb(77, 85, 93)
 				font-size: 12px
 				line-height: 16px
 				&.active
 					color: #fff
 				.count
-					font-size: 8px
+					font-size: 12px
 					margin-left: 2px
 				&.positive
 					background: rgba(0, 160, 220, 0.2)

@@ -3,19 +3,20 @@
 		<div class="goods">
 			<div class="menu-wrapper" ref="menuWrapper">
 				<ul>
-					<li v-for="(item, index) in goods" class="menu-item" :class="{'current': currentIndex === index}" @click="selectMenu(index,$event)">
-						<span class="text border-1px">
+					<li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current': currentIndex === index}" @click="selectMenu(index,$event)">
+						<span class="text">
 							<span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
+							<span class="foodCount" v-show="item.goodCount">{{item.goodCount}}</span>
 						</span>
 					</li>
 				</ul>
 			</div>
 			<div class="foods-wrapper" ref="foodsWrapper">
 				<ul>
-					<li v-for="item in goods" class="food-list food-list-hook">
+					<li v-for="(item,index) in goods" class="food-list food-list-hook">
 						<h1 class="title">{{item.name}}</h1>
 						<ul>
-							<li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
+							<li @click="selectFood(food,index,$event)" v-for="food in item.foods" class="food-item border-1px">
 								<div class="icon">
 									<img width="57" height="57" :src="food.icon">
 								</div>
@@ -26,10 +27,10 @@
 										<span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
 									</div>
 									<div class="price">
-										<span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">¥{{food.oldPrice}}</span>
+										<span class="now">{{food.price}}</span><span v-show="food.oldPrice" class="old">{{food.oldPrice}}</span>
 									</div>
 									<div class="cartcontrol-wrapper">
-										<cartcontrol @add="addFood" :food="food"></cartcontrol>
+										<cartcontrol @add="addFood($event,index)"  :food="food" :goods="goods" :goodType="index"></cartcontrol>
 									</div>
 								</div>
 							</li>
@@ -37,9 +38,9 @@
 					</li>
 				</ul>
 			</div>
-			<shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
+			<shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods" :goods="goods" ></shopcart>
 		</div>
-		<food :food="selectedFood" @add="addFood" ref="food"></food>
+		<food :food="selectedFood" :goods="goods" :goodType="selectedType" @add="addFood($event,selectedType)"  ref="food"></food>
 	</div>
 </template>
 
@@ -63,7 +64,8 @@
     		goods: [],
     		listHeight: [],
     		scrollY: 0,
-    		selectedFood: {}
+    		selectedFood: {},
+    		selectedType: 0
     	}
     },
     computed: {
@@ -103,6 +105,14 @@
     		}
     	})
     },
+    mounted () {
+    	window.addEventListener('popstate', () => {
+    		var showFlag = this.$refs.food.showFlag
+    		if (showFlag) {
+    			this.$refs.food.showFlag = false
+    		}
+    	})
+    },
     methods: {
     	selectMenu (index, event) {
     		if (!event._constructed) {
@@ -112,14 +122,16 @@
     		let el = foodList[index]
     		this.foodsScroll.scrollToElement(el, 300)
     	},
-    	selectFood (food, event) {
+    	selectFood (food, type, event) {
     		if (!event._constructed) {
     			return
     		}
+    		this.selectedType = Number(type)
     		this.selectedFood = food
+    		history.pushState({url: 'food'}, '', '')
     		this.$refs.food.show()
     	},
-    	addFood (target) {
+    	addFood (target, type) {
 	    	this._drop(target)
 	    },
 	    _drop (target) {
@@ -176,17 +188,18 @@
 			.menu-item
 				display: table
 				height: 54px
-				width: 56px
+				width: 60px
 				line-height: 14px
 				padding: 0 12px
+				border-1px(rgba(7,17,27,0.1))
 				&.current
 					position: relative
 					z-index: 10
 					margin-top: -1px
+					padding-left: 8px
+					border-left: 4px solid #1a96ff
 					background: #fff
 					font-weight: 700
-					.text
-						border-none()
 				.icon
 					display: inline-block
 					vertical-align: top
@@ -207,11 +220,20 @@
 						bg-image('special_3')
 				.text
 					display: table-cell
-					width: 56px
+					width: 60px
 					vertical-align: middle
 					font-size: 12px
-					border-1px(rgba(7,17,27,0.1))
-				
+					.foodCount
+						position: absolute
+						top: 3px
+						right: 8px
+						width: 18px
+						height: 12px
+						font-size: 9px
+						border-radius: 10px
+						text-align: center
+						background: #f01414
+						color: rgb(255, 255, 255)
 		.foods-wrapper
 			flex: 1
 			.title
@@ -258,14 +280,23 @@
 							margin-right: 8px
 							color: rgb(240, 20, 20)
 							font-size: 14px
+							&:before
+								content: '￥'
+								font-size: 8px
+								font-weight: 700
 						.old
 							text-decoration: line-through
 							font-size: 10px
 							color: rgb(147, 153, 159)
+							&:before
+								content: '￥'
+								font-size: 8px
+								font-weight: 700
 					.cartcontrol-wrapper
 						position: absolute
-						right: -10px
-						bottom: 12px
+						right: -5px
+						bottom: 0px
+						padding: 10px 0 10px 10px
 					
 				
 </style>
